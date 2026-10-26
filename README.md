@@ -1,56 +1,82 @@
-# The manuscript has been submitted to IEEE Transactions on Intelligent Transportation Systems
+# VTD-LO
 
-# VTD-LO: Voxel-Temporal Dynamic Filtering LiDAR Odometry with Two-Stage Dynamic Suppression and Adaptive Residual Weighting
+### Voxel-Temporal Dynamic Filtering LiDAR Odometry
+
+VTD-LO estimates sensor motion from 3D LiDAR scans while maintaining a local feature map. Its voxel-temporal statistics identify geometrically unstable regions, and its adaptive residual weighting combines temporal stability, map-point age, and measurement range during scan-to-map registration. The system uses LiDAR geometry without semantic labels or an IMU.
+
+[中文](README_zh-CN.md) · [Demos](#demos) · [Method](docs/method.md) · [Build and run](docs/usage.md) · [ROS interfaces](docs/usage.md#ros-interfaces)
+
+## Demos
 
 <p align="center">
-  <img src="https://github.com/qfwang23/VTD-LO/blob/feb5ae156f1869c22bf65f3fa8e5bede164cca43/result/02map.png?raw=1" width="45%" />
-  <img src="https://github.com/qfwang23/VTD-LO/blob/ac9b0cd4dfe308cf0a35bb80ec29678d6c88f410/result/08map.png?raw=1" width="45%" />
+  <a href="assets/demos/kitti-trajectories.mp4"><img src="assets/demos/kitti-preview.gif" alt="VTD-LO KITTI trajectory replay" width="760"></a>
 </p>
 
+| Trajectory replay | Local feature-map replay |
+| :---: | :---: |
+| [![KITTI trajectories](assets/demos/kitti-trajectories.png)](assets/demos/kitti-trajectories.mp4) | [![KITTI local feature maps](assets/demos/kitti-local-map.png)](assets/demos/kitti-local-map.mp4) |
+| [Watch MP4](assets/demos/kitti-trajectories.mp4) | [Watch MP4](assets/demos/kitti-local-map.mp4) |
 
+The trajectory video replays saved VTD-LO estimates for KITTI 02 and 08 at 20× their recorded time. The local-map video shows recorded feature-map snapshots from three short windows in KITTI 08. Click a preview to open the full video.
 
+## What VTD-LO does
 
-![示例图片](https://github.com/qfwang23/VTD-LO/blob/a63b95719870e0c7074aaa2081af4e2649f99c9f/result/image.png)
+- **Tracks geometric stability over time.** Separate corner and surface voxel states summarize repeated map observations with online mean and variance updates.
+- **Suppresses unstable geometry at two stages.** Voxel states guide correspondence selection during registration and point removal when updating the local feature map.
+- **Weights retained constraints.** Temporal stability, map-point age, and range contribute to a bounded residual weight used with robust nonlinear optimization.
+- **Provides an accessible ROS workflow.** The package includes KITTI and M2DGR launch files, live odometry and feature-map topics, RViz visualization, and TUM trajectory export.
 
+The temporal model evaluates how geometry behaves across observations. An object category does not determine its label: a stationary vehicle can provide stable geometry, while an unstable region can be suppressed without identifying the object that produced it.
 
+## Method overview
 
+<p align="center">
+  <img src="assets/figures/pipeline.png" alt="VTD-LO processing pipeline" width="920">
+</p>
 
+LiDAR scans are organized into scan lines and converted into edge and planar features. A motion prediction initializes scan-to-map registration. The optimizer uses a local feature map with voxel-temporal statistics to select and weight geometric constraints. The resulting pose transforms new features into the map, after which the local map and its temporal states are updated.
 
+See [the method and parameter reference](docs/method.md) for the temporal statistic, residual weights, and configuration details.
 
-## Dependence
+## Get started
+
+The reference environment is **Ubuntu 20.04 with ROS Noetic**. The package uses **C++17, PCL, Eigen, and Ceres**.
+
+Follow [Build and run](docs/usage.md) to install dependencies and create a catkin workspace. With the workspace sourced and `08.bag` placed in `~/DATASET/KITTI/`:
+
 ```bash
-Ubuntu 20.04
-ROS Noetic（roscpp、std_msgs、sensor_msgs、geometry_msgs、pcl_ros）
-C++ 14
-CMake ≥ 3.16
-PCL≥ 1.10.0
-Eigen ≥ 3.3.7
+mkdir -p "$HOME/vtd_results"
+roslaunch vtd_lo kitti.launch \
+  seq:=08 \
+  tum_path:="$HOME/vtd_results/kitti08.txt"
 ```
 
-## Install
- 
+The launch file starts bag playback, odometry, mapping, and visualization. For M2DGR, provide a bag path:
+
 ```bash
-mkdir -p ~/catkin_ws/src
-cd ~/catkin_ws/src
-git clone https://github.com/qfwang23/VTD-LO.git
-cd ~/catkin_ws
-catkin_make
-source devel/setup.bash
-roslauch vtd_lo kitti.launch
+roslaunch vtd_lo m2dgr.launch \
+  bag_file:="/absolute/path/hall_01.bag" \
+  tum_path:="$HOME/vtd_results/hall01.txt"
+```
+
+## Map examples
+
+| KITTI 02 | KITTI 08 |
+| :---: | :---: |
+| ![VTD-LO KITTI 02 map](result/02map.png) | ![VTD-LO KITTI 08 map](result/08map.png) |
+
+## Repository
+
+```text
+VTD-LO(main)/src/vtd_lo/   ROS package: nodes, headers, launch files, RViz
+assets/demos/             Video demonstrations and previews
+assets/figures/           Method figure
+docs/                    Method, parameters, installation, and usage
+result/                  Map images and trajectory figures
 ```
 
 ## Acknowledgements
-```bash
-@INPROCEEDINGS{9636655,
-  author={Wang, Han and Wang, Chen and Chen, Chun-Lin and Xie, Lihua},
-  booktitle={2021 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)}, 
-  title={F-LOAM : Fast LiDAR Odometry and Mapping}, 
-  year={2021},
-  volume={},
-  number={},
-  pages={4390-4396},
-  keywords={Location awareness;Simultaneous localization and mapping;Laser radar;Remotely guided vehicles;Pose estimation;Feature extraction;Distortion},
-  doi={10.1109/IROS51168.2021.9636655}}
 
+VTD-LO builds on the LiDAR odometry work and open-source implementations of [LOAM](https://github.com/laboshinl/loam_velodyne), [A-LOAM](https://github.com/HKUST-Aerial-Robotics/A-LOAM), [F-LOAM](https://github.com/wh200720041/floam), and [PFilter](https://github.com/yjsx/PFilter). We thank their authors and contributors. VTD-LO develops voxel-temporal dynamic suppression and adaptive residual weighting within this feature-based odometry framework.
 
-```
+We also thank the teams behind [KITTI](https://www.cvlibs.net/datasets/kitti/eval_odometry.php) and [M2DGR](https://github.com/SJTU-ViSYS/M2DGR) for making their datasets available. The demonstrations above use KITTI data.
