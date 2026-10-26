@@ -8,16 +8,21 @@ VTD-LO estimates sensor motion from 3D LiDAR scans while maintaining a local fea
 
 ## Demos
 
+### KITTI 02 and 08 · Trajectory replay
+
 <p align="center">
-  <a href="https://qfwang23.github.io/VTD-LO/#trajectories"><img src="assets/demos/kitti-preview.gif" alt="VTD-LO KITTI trajectory replay" width="760"></a>
+  <img src="assets/demos/kitti-trajectories.gif" alt="VTD-LO full trajectory replay on KITTI 02 and 08" width="760">
 </p>
 
-| Trajectory replay | Local feature-map replay |
-| :---: | :---: |
-| [![KITTI trajectories](assets/demos/kitti-trajectories.png)](https://qfwang23.github.io/VTD-LO/#trajectories) | [![KITTI local feature maps](assets/demos/kitti-local-map.png)](https://qfwang23.github.io/VTD-LO/#local-map) |
-| [Watch video](https://qfwang23.github.io/VTD-LO/#trajectories) | [Watch video](https://qfwang23.github.io/VTD-LO/#local-map) |
+Saved VTD-LO estimates for KITTI 02 and 08, replayed at 20× their recorded time.
 
-The trajectory video replays saved VTD-LO estimates for KITTI 02 and 08 at 20× their recorded time. The local-map video shows recorded feature-map snapshots from three short windows in KITTI 08. Click a preview to open the full video.
+### KITTI 08 · Local feature-map replay
+
+<p align="center">
+  <img src="assets/demos/kitti-local-map.gif" alt="VTD-LO local feature-map replay on KITTI 08" width="760">
+</p>
+
+Recorded feature-map snapshots from three short windows in KITTI 08, replayed at 1× recorded time. Cyan marks edge features and amber marks surface features.
 
 ## What VTD-LO does
 

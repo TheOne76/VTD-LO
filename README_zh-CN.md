@@ -8,16 +8,21 @@ VTD-LO 从三维激光雷达扫描中估计传感器运动，并维护局部特�
 
 ## 演示
 
+### KITTI 02 和 08 · 轨迹回放
+
 <p align="center">
-  <a href="https://qfwang23.github.io/VTD-LO/#trajectories"><img src="assets/demos/kitti-preview.gif" alt="VTD-LO KITTI 轨迹回放" width="760"></a>
+  <img src="assets/demos/kitti-trajectories.gif" alt="VTD-LO 在 KITTI 02 和 08 上的完整轨迹回放" width="760">
 </p>
 
-| 轨迹回放 | 局部特征地图回放 |
-| :---: | :---: |
-| [![KITTI 轨迹](assets/demos/kitti-trajectories.png)](https://qfwang23.github.io/VTD-LO/#trajectories) | [![KITTI 局部特征地图](assets/demos/kitti-local-map.png)](https://qfwang23.github.io/VTD-LO/#local-map) |
-| [观看视频](https://qfwang23.github.io/VTD-LO/#trajectories) | [观看视频](https://qfwang23.github.io/VTD-LO/#local-map) |
+以记录时间的 20 倍速回放 KITTI 02 和 08 上保存的 VTD-LO 估计轨迹。
 
-轨迹视频以记录时间的 20 倍速回放 KITTI 02 和 08 上保存的 VTD-LO 估计轨迹；局部地图视频展示 KITTI 08 三个短时间窗口中记录的特征地图快照。点击预览图可打开完整视频。
+### KITTI 08 · 局部特征地图回放
+
+<p align="center">
+  <img src="assets/demos/kitti-local-map.gif" alt="VTD-LO 在 KITTI 08 上的局部特征地图回放" width="760">
+</p>
+
+以记录时间的原速回放 KITTI 08 三个短时间窗口中的特征地图快照。青色为边缘特征，橙黄色为平面特征。
 
 ## 方法特点
 
