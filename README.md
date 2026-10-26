@@ -8,40 +8,53 @@ VTD-LO estimates sensor motion from 3D LiDAR scans while maintaining a local fea
 
 ## Demos
 
-### KITTI 02 and 08 · Trajectory replay
+### Temporal local-map replay · KITTI 08
 
 <p align="center">
-  <img src="assets/demos/kitti-trajectories.gif" alt="VTD-LO full trajectory replay on KITTI 02 and 08" width="760">
+  <img src="assets/demos/kitti-local-map.gif" alt="Recorded local feature maps evolving over three KITTI 08 time windows" width="800">
 </p>
 
-Saved VTD-LO estimates for KITTI 02 and 08, replayed at 20× their recorded time.
+Three recorded time windows show the local feature maps used for registration, with the estimated pose and position along the route. Playback is at 1× recorded time; cyan denotes edge features and amber denotes surface features.
 
-### KITTI 08 · Local feature-map replay
+### Local-map geometry · KITTI 08
 
 <p align="center">
-  <img src="assets/demos/kitti-local-map.gif" alt="VTD-LO local feature-map replay on KITTI 08" width="760">
+  <img src="assets/demos/kitti-map-detail.gif" alt="Three-dimensional views of recorded KITTI 08 local feature maps" width="800">
 </p>
 
-Recorded feature-map snapshots from three short windows in KITTI 08, replayed at 1× recorded time. Cyan marks edge features and amber marks surface features.
+A moving viewpoint reveals the spatial structure of three recorded local-map snapshots. Each point set remains fixed during its eight-second view, with a 10 m scale and a route locator.
 
-## What VTD-LO does
-
-- **Tracks geometric stability over time.** Separate corner and surface voxel states summarize repeated map observations with online mean and variance updates.
-- **Suppresses unstable geometry at two stages.** Voxel states guide correspondence selection during registration and point removal when updating the local feature map.
-- **Weights retained constraints.** Temporal stability, map-point age, and range contribute to a bounded residual weight used with robust nonlinear optimization.
-- **Provides an accessible ROS workflow.** The package includes KITTI and M2DGR launch files, live odometry and feature-map topics, RViz visualization, and TUM trajectory export.
-
-The temporal model evaluates how geometry behaves across observations. An object category does not determine its label: a stationary vehicle can provide stable geometry, while an unstable region can be suppressed without identifying the object that produced it.
-
-## Method overview
+### Five recorded runs · UrbanLoco
 
 <p align="center">
-  <img src="assets/figures/pipeline.png" alt="VTD-LO processing pipeline" width="920">
+  <img src="assets/demos/urbanloco-five-sequences.gif" alt="VTD-LO recorded trajectories on five UrbanLoco sequences with one shared sensor configuration" width="800">
 </p>
 
-LiDAR scans are organized into scan lines and converted into edge and planar features. A motion prediction initializes scan-to-map registration. The optimizer uses a local feature map with voxel-temporal statistics to select and weight geometric constraints. The resulting pose transforms new features into the map, after which the local map and its temporal states are updated.
+Five UrbanLoco runs use one shared sensor configuration. Their saved pose estimates are replayed sequentially at 40×, with the current position, elapsed time, and sequence progress.
 
-See [the method and parameter reference](docs/method.md) for the temporal statistic, residual weights, and configuration details.
+### Complete trajectory replay · KITTI 02 and 08
+
+<p align="center">
+  <img src="assets/demos/kitti-trajectories.gif" alt="Complete saved VTD-LO trajectories on KITTI 02 and 08" width="800">
+</p>
+
+The saved trajectories for KITTI 02 and 08 are replayed together at 20× recorded time.
+
+[Recording details and sequence information](docs/demonstrations.md)
+
+## Method
+
+VTD-LO couples feature-to-map registration with a temporal model of local geometry. Edge and planar features form the registration map; repeated observations update separate voxel statistics for the two feature types.
+
+| Component | Role in VTD-LO |
+| --- | --- |
+| **Voxel-temporal statistics** | Track geometric variation through online observation counts, means, and variances. |
+| **Two-stage dynamic suppression** | Screen unstable correspondences during registration and remove unstable geometry during local-map updates. |
+| **Adaptive residual weighting** | Combine voxel stability, map-point age, and measurement range into bounded weights for robust pose optimization. |
+
+The temporal model follows observed geometry rather than semantic object categories. A stationary vehicle can contribute stable constraints without requiring an object detector. The system uses LiDAR geometry without IMU fusion or a loop-closure backend.
+
+[Method and parameter reference](docs/method.md) · [ROS interfaces](docs/usage.md#ros-interfaces)
 
 ## Get started
 
@@ -64,24 +77,8 @@ roslaunch vtd_lo m2dgr.launch \
   tum_path:="$HOME/vtd_results/hall01.txt"
 ```
 
-## Map examples
-
-| KITTI 02 | KITTI 08 |
-| :---: | :---: |
-| ![VTD-LO KITTI 02 map](result/02map.png) | ![VTD-LO KITTI 08 map](result/08map.png) |
-
-## Repository
-
-```text
-VTD-LO(main)/src/vtd_lo/   ROS package: nodes, headers, launch files, RViz
-assets/demos/             Video demonstrations and previews
-assets/figures/           Method figure
-docs/                    Method, parameters, installation, and usage
-result/                  Map images and trajectory figures
-```
-
 ## Acknowledgements
 
 VTD-LO builds on the LiDAR odometry work and open-source implementations of [LOAM](https://github.com/laboshinl/loam_velodyne), [A-LOAM](https://github.com/HKUST-Aerial-Robotics/A-LOAM), [F-LOAM](https://github.com/wh200720041/floam), and [PFilter](https://github.com/yjsx/PFilter). We thank their authors and contributors. VTD-LO develops voxel-temporal dynamic suppression and adaptive residual weighting within this feature-based odometry framework.
 
-We also thank the teams behind [KITTI](https://www.cvlibs.net/datasets/kitti/eval_odometry.php) and [M2DGR](https://github.com/SJTU-ViSYS/M2DGR) for making their datasets available. The demonstrations above use KITTI data.
+We also thank the teams behind [KITTI](https://www.cvlibs.net/datasets/kitti/eval_odometry.php), [UrbanLoco](https://github.com/weisongwen/UrbanLoco), and [M2DGR](https://github.com/SJTU-ViSYS/M2DGR) for making their datasets available. The demonstrations above use KITTI and UrbanLoco recordings.

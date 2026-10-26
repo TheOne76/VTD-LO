@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Watch VTD-LO LiDAR odometry demonstrations: complete KITTI trajectories and recorded voxel-temporal local feature maps.">
+  <meta name="description" content="VTD-LO in motion: recorded local feature maps, three-dimensional map views, and trajectory replays on KITTI and UrbanLoco.">
   <meta name="theme-color" content="#09101b">
   <title>VTD-LO · Video demonstrations</title>
   <style>
@@ -26,7 +26,7 @@
     .lead { max-width: 710px; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.7; }
     .tags { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 25px; }
     .tags span { border: 1px solid var(--line); border-radius: 6px; padding: 5px 11px; color: var(--muted); font-size: 12px; }
-    .demo { overflow: hidden; border: 1px solid var(--line); background: var(--panel); border-radius: 14px; margin-bottom: 30px; }
+    .demo { scroll-margin-top: 24px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); border-radius: 14px; margin-bottom: 30px; }
     .demo-heading { display: flex; align-items: flex-start; gap: 20px; padding: 27px 30px 23px; }
     .number { color: var(--accent); font-size: 14px; font-weight: 650; padding-top: 4px; }
     h2 { margin: 0 0 6px; font-size: 24px; line-height: 1.3; letter-spacing: -.45px; font-weight: 650; }
@@ -51,7 +51,7 @@
       .shell { width: calc(100% - 32px); }
       nav { min-height: 72px; gap: 15px; }
       .brand { font-size: 20px; }
-      .navlinks { gap: 16px; font-size: 12px; }
+      .navlinks { gap: 12px; font-size: 11px; }
       .hero { padding: 40px 0 30px; }
       h1 { letter-spacing: -1.2px; }
       .lead { font-size: 16px; }
@@ -75,6 +75,7 @@
     <nav class="shell" aria-label="Main navigation">
       <a class="brand" href="https://github.com/qfwang23/VTD-LO">VTD-LO</a>
       <div class="navlinks">
+        <a href="#local-map">Demos</a>
         <a href="https://github.com/qfwang23/VTD-LO/blob/main/docs/method.md">Method</a>
         <a href="https://github.com/qfwang23/VTD-LO">Back to GitHub ↗</a>
       </div>
@@ -84,45 +85,81 @@
     <section class="hero" aria-labelledby="page-title">
       <p class="eyebrow">Voxel-Temporal LiDAR Odometry</p>
       <h1 id="page-title">VTD-LO in motion.</h1>
-      <p class="lead">Explore recorded trajectories and local feature maps from VTD-LO: a LiDAR-only odometry system that uses temporal geometric stability to guide scan-to-map registration.</p>
+      <p class="lead">Explore the geometry used for registration and the trajectories estimated by VTD-LO on KITTI and UrbanLoco. Voxel-temporal statistics and adaptive residual weighting guide this LiDAR-only odometry system.</p>
       <div class="tags" aria-label="Method features">
-        <span>LiDAR geometry</span><span>Temporal voxel statistics</span><span>Adaptive residual weighting</span>
+        <span>4 demonstrations</span><span>7 recorded trajectories</span><span>2 datasets</span>
       </div>
     </section>
-    <section class="demo" id="trajectories" aria-labelledby="trajectory-title">
+    <section class="demo" id="local-map" aria-labelledby="local-map-title">
       <div class="demo-heading">
         <span class="number">01</span>
         <div>
-          <h2 id="trajectory-title">Complete trajectory replay</h2>
+          <h2 id="local-map-title">Temporal local-map replay</h2>
+          <p>KITTI 08 · Three recorded time windows · 1× playback</p>
+        </div>
+        <span class="duration">24 seconds</span>
+      </div>
+      <video autoplay muted loop controls playsinline preload="auto" poster="assets/demos/kitti-local-map.png" width="1280" height="720" aria-label="Recorded edge and surface maps on KITTI 08">
+        <source src="assets/demos/kitti-local-map.mp4" type="video/mp4">
+        <a href="assets/demos/kitti-local-map.mp4">Download this demonstration.</a>
+      </video>
+      <div class="demo-footer">
+        <p>Follow the local feature maps used by the odometry module through three eight-second windows. Cyan denotes edge features and amber denotes surface features. Recorded snapshots appear at approximately 2.5 Hz, alongside the estimated pose and route position.</p>
+        <a class="text-link" href="assets/demos/kitti-local-map.mp4" download>Download MP4 ↓</a>
+      </div>
+    </section>
+    <section class="demo" id="map-detail" aria-labelledby="map-detail-title">
+      <div class="demo-heading">
+        <span class="number">02</span>
+        <div>
+          <h2 id="map-detail-title">Local-map geometry</h2>
+          <p>KITTI 08 · Three-dimensional feature structure · Viewpoint orbit</p>
+        </div>
+        <span class="duration">24 seconds</span>
+      </div>
+      <video autoplay muted loop controls playsinline preload="auto" poster="assets/demos/kitti-map-detail.png" width="1280" height="720" aria-label="Three-dimensional views of recorded KITTI 08 feature maps">
+        <source src="assets/demos/kitti-map-detail.mp4" type="video/mp4">
+        <a href="assets/demos/kitti-map-detail.mp4">Download this demonstration.</a>
+      </video>
+      <div class="demo-footer">
+        <p>Three recorded local-map snapshots are shown from smoothly changing viewpoints. Each point set remains fixed during its eight-second view; the viewing camera moves around it. A 10 m scale and route locator show the extent and location of each view.</p>
+        <a class="text-link" href="assets/demos/kitti-map-detail.mp4" download>Download MP4 ↓</a>
+      </div>
+    </section>
+    <section class="demo" id="urbanloco" aria-labelledby="urbanloco-title">
+      <div class="demo-heading">
+        <span class="number">03</span>
+        <div>
+          <h2 id="urbanloco-title">Five recorded urban runs</h2>
+          <p>UrbanLoco · One shared sensor configuration · 40× playback</p>
+        </div>
+        <span class="duration">33 seconds</span>
+      </div>
+      <video autoplay muted loop controls playsinline preload="auto" poster="assets/demos/urbanloco-five-sequences.png" width="1280" height="720" aria-label="Recorded VTD-LO trajectories on five UrbanLoco sequences">
+        <source src="assets/demos/urbanloco-five-sequences.mp4" type="video/mp4">
+        <a href="assets/demos/urbanloco-five-sequences.mp4">Download this demonstration.</a>
+      </video>
+      <div class="demo-footer">
+        <p>Five saved trajectories are replayed sequentially, using one shared sensor configuration across the recorded runs. Each panel shows local map coordinates, the current pose, elapsed recording time, and progress through the sequence. Brief holds separate the runs.</p>
+        <a class="text-link" href="assets/demos/urbanloco-five-sequences.mp4" download>Download MP4 ↓</a>
+      </div>
+    </section>
+    <section class="demo" id="trajectories" aria-labelledby="trajectories-title">
+      <div class="demo-heading">
+        <span class="number">04</span>
+        <div>
+          <h2 id="trajectories-title">Complete trajectory replay</h2>
           <p>KITTI 02 &amp; 08 · Estimated poses · 20× playback</p>
         </div>
         <span class="duration">24 seconds</span>
       </div>
-      <video autoplay muted loop controls playsinline preload="auto" poster="assets/demos/kitti-trajectories.png" width="1280" height="720" aria-label="VTD-LO trajectory replay on KITTI sequences 02 and 08">
+      <video autoplay muted loop controls playsinline preload="auto" poster="assets/demos/kitti-trajectories.png" width="1280" height="720" aria-label="Recorded VTD-LO trajectories on KITTI 02 and 08">
         <source src="assets/demos/kitti-trajectories.mp4" type="video/mp4">
-        <a href="assets/demos/kitti-trajectories.mp4">Download the trajectory replay video.</a>
+        <a href="assets/demos/kitti-trajectories.mp4">Download this demonstration.</a>
       </video>
       <div class="demo-footer">
-        <p>Saved VTD-LO pose estimates are replayed in a shared timeline at 20× their recorded time. The top views show the full KITTI 02 and 08 trajectories, with the current pose and elapsed sequence time.</p>
+        <p>The complete saved KITTI 02 and 08 trajectories are replayed on a shared timeline. Top views show the estimated paths, the current pose, and elapsed recording time.</p>
         <a class="text-link" href="assets/demos/kitti-trajectories.mp4" download>Download MP4 ↓</a>
-      </div>
-    </section>
-    <section class="demo" id="local-map" aria-labelledby="map-title">
-      <div class="demo-heading">
-        <span class="number">02</span>
-        <div>
-          <h2 id="map-title">Local feature-map replay</h2>
-          <p>KITTI 08 · Three observation windows · Approximately 2.5 snapshots/s</p>
-        </div>
-        <span class="duration">24 seconds</span>
-      </div>
-      <video autoplay muted loop controls playsinline preload="auto" poster="assets/demos/kitti-local-map.png" width="1280" height="720" aria-label="VTD-LO edge and surface local feature maps on KITTI sequence 08">
-        <source src="assets/demos/kitti-local-map.mp4" type="video/mp4">
-        <a href="assets/demos/kitti-local-map.mp4">Download the local feature-map replay video.</a>
-      </video>
-      <div class="demo-footer">
-        <p>Three eight-second windows show the saved local maps used by the odometry module. Edge features appear in cyan and surface features in amber. Snapshots are displayed at approximately 2.5 Hz, with the estimated pose and a sequence overview; each window plays at 1× recorded time.</p>
-        <a class="text-link" href="assets/demos/kitti-local-map.mp4" download>Download MP4 ↓</a>
       </div>
     </section>
     <section class="method" aria-labelledby="method-title">
@@ -148,7 +185,7 @@
   </main>
   <footer>
     <div class="shell footer-content">
-      <p>Demonstrations rendered from recorded VTD-LO outputs on the <a href="https://www.cvlibs.net/datasets/kitti/eval_odometry.php">KITTI odometry dataset</a>. We thank the KITTI authors for making the data available.</p>
+      <p>Demonstrations rendered from recorded VTD-LO outputs on <a href="https://www.cvlibs.net/datasets/kitti/eval_odometry.php">KITTI</a> and <a href="https://github.com/weisongwen/UrbanLoco">UrbanLoco</a>. We thank the dataset authors. <a href="https://github.com/qfwang23/VTD-LO/blob/main/docs/demonstrations.md">Recording details</a>.</p>
       <a href="https://github.com/qfwang23/VTD-LO#readme">Source code &amp; documentation ↗</a>
     </div>
   </footer>

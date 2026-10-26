@@ -35,10 +35,6 @@ VTD-LO 从三维激光雷达扫描中估计传感器运动，并维护局部特�
 
 ## 处理流程
 
-<p align="center">
-  <img src="assets/figures/pipeline.png" alt="VTD-LO 处理流程" width="920">
-</p>
-
 系统首先将激光扫描组织为扫描线并提取边缘和平面特征，再用运动预测初始化扫描与地图配准。优化器利用带有体素时序状态的局部特征地图选择几何约束并设置权重。估计位姿将新特征转换到地图坐标系，随后更新局部地图及其时序状态。
 
 时序统计量、残差权重与配置含义见[方法与参数说明](docs/method.md)。
@@ -63,12 +59,6 @@ roslaunch vtd_lo m2dgr.launch \
   bag_file:="/absolute/path/hall_01.bag" \
   tum_path:="$HOME/vtd_results/hall01.txt"
 ```
-
-## 地图示例
-
-| KITTI 02 | KITTI 08 |
-| :---: | :---: |
-| ![VTD-LO KITTI 02 地图](result/02map.png) | ![VTD-LO KITTI 08 地图](result/08map.png) |
 
 ## 目录
 
